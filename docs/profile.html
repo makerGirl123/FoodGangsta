@@ -8,7 +8,28 @@
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Calibri'>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Calibri", sans-serif}
-.w3-bar-block .w3-bar-item {padding:20px}
+.w3-bar-block .w3-bar-item {padding: 20px}
+a {
+  text-decoration: none;
+}
+button {
+  background-color: #378f6f;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+.w3-top { 
+  position: fixed; 
+  width: 100%; 
+  z-index: 1; /* Ensure it stays on top of other elements */ 
+  background-color: white;
+}
+body { 
+  padding-top: 100px; /* Adjust the value as needed */ 
+  }
 a {
   text-decoration: none;
 }
@@ -16,30 +37,30 @@ a {
 </head>
 <body class="w3-light-grey">
 
-
-<!-- Sidebar (hidden by default) -->
-<nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
-  <a href="javascript:void(0)" onclick="w3_close()"
-  class="w3-bar-item w3-button">Close Menu</a>
-  <a href="#home" onclick="location.href='index.html'" class="w3-bar-item w3-button">Home</a>
-  <a href="#recipes" onclick="location.href='recipes.html'" class="w3-bar-item w3-button">Recipes</a>
-  <a href="#profile" onclick="location.href='profile.html'" class="w3-bar-item w3-button">Profile</a>
-  <a href="#about" onclick="location.href='about.html'" class="w3-bar-item w3-button">About Us</a>
-</nav>
-
 <!-- Top menu -->
 <div class="w3-top">
   <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
     <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
     <div class="w3-right w3-padding-16"><a href="login.html">Login</a></div>
-    <div class="w3-center w3-padding-16">FoodGangsta</div>
+    <div class="w3-center w3-padding-16">
+      <a href="index.html">
+        <img src="media/full_logo.png" alt="FoodGangsta Logo" style="height: 80px;">
+      </a>
+    </div>
   </div>
 </div>
-
+<!-- Sidebar (hidden by default) -->
+  <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()"
+    class="w3-bar-item w3-button">Close Menu</a>
+    <a href="#home" onclick="location.href='index.html'" class="w3-bar-item w3-button">Home</a>
+    <a href="#recipes" onclick="location.href='recipes.html'" class="w3-bar-item w3-button">Recipes</a>
+    <a href="#profile" onclick="location.href='profile.html'" class="w3-bar-item w3-button">Profile</a>
+    <a href="#about" onclick="location.href='about.html'" class="w3-bar-item w3-button">About Us</a>
+  </nav>
 
 <!-- Page Container -->
 <div class="w3-content w3-margin-top" style="max-width:1400px;">
-
   
   <!-- The Grid -->
   <div class="w3-row-padding">
@@ -49,7 +70,7 @@ a {
     
       <div class="w3-white w3-text-grey w3-card-4">
         <div class="w3-display-container">
-          <img src="https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg" style="width:100%" alt="ProfilePic">
+          <img src="media/default_profile.png" style="width:100%" alt="Avatar">
           <div class="w3-display-bottomleft w3-container w3-text-black">
             <h2>Name Name</h2>
           </div>
@@ -61,18 +82,18 @@ a {
           <!-- <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>1224435534</p> -->
           <hr>
 
-          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b></p>
-          <p>Adobe Photoshop</p>
+          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Allergens</b></p>
+          <p>Dairy</p>
           <div class="w3-light-grey w3-round-xlarge w3-small">
             <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:90%">90%</div>
           </div>
-          <p>Photography</p>
+          <p>Tree Nuts</p>
           <div class="w3-light-grey w3-round-xlarge w3-small">
             <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:80%">
               <div class="w3-center w3-text-white">80%</div>
             </div>
           </div>
-          <p>Illustrator</p>
+          <p>Soy</p>
           <div class="w3-light-grey w3-round-xlarge w3-small">
             <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:75%">75%</div>
           </div>
@@ -81,7 +102,7 @@ a {
             <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:50%">50%</div>
           </div>
           <br>
-
+          <!--
           <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b></p>
           <p>English</p>
           <div class="w3-light-grey w3-round-xlarge">
@@ -96,6 +117,7 @@ a {
             <div class="w3-round-xlarge w3-teal" style="height:24px;width:25%"></div>
           </div>
           <br>
+        -->
         </div>
       </div><br>
 
@@ -104,6 +126,11 @@ a {
 
     <!-- Right Column -->
     <div class="w3-twothird">
+
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <button type="button" onclick="location.href='findfriends.html'">Find Friends</button>
+
+      </div>
     
       <div class="w3-container w3-card w3-white w3-margin-bottom">
         <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience</h2>
@@ -177,6 +204,6 @@ a {
     document.getElementById("mySidebar").style.display = "none";
   }
   </script>
-
+  
 </body>
 </html>
