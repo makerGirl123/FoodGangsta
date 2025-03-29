@@ -5,6 +5,9 @@
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 form {border: 3px solid #f1f1f1;}
+a {
+  text-decoration: none;
+}
 
 input[type=text], input[type=password] {
   width: 100%;
@@ -54,6 +57,17 @@ span.psw {
   padding-top: 16px;
 }
 
+.w3-top { 
+  position: fixed; 
+  width: 100%; 
+  z-index: 1; /* Ensure it stays on top of other elements */ 
+  background-color: white;
+}
+
+body { 
+  padding-top: 100px; /* Adjust the value as needed */ 
+}
+
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
   span.psw {
@@ -67,6 +81,18 @@ span.psw {
 </style>
 </head>
 <body>
+  <!-- Top menu -->
+<div class="w3-top">
+  <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
+    <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
+    <div class="w3-right w3-padding-16"><a href="login.html">Login</a></div>
+    <div class="w3-center w3-padding-16">
+      <a href="index.html">
+        <img src="media/full_logo.png" alt="FoodGangsta Logo" style="height: 80px;">
+      </a>
+    </div>
+  </div>
+</div>
 
 <h2>Login</h2>
 
@@ -93,6 +119,17 @@ span.psw {
     <span class="psw">Forgot <a href="#">password?</a></span>
   </div>
 </form>
+
+<script>
+  // Script to open and close sidebar
+  function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+  }
+   
+  function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+  }
+  </script>
 
 </body>
 </html>
