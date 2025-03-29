@@ -13,12 +13,21 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Calibri", sans-serif}
 a {
   text-decoration: none;
 }
+.w3-top { 
+  position: fixed; 
+  width: 100%; 
+  z-index: 1; /* Ensure it stays on top of other elements */ 
+  background-color: white;
+}
+body { 
+  padding-top: 100px; /* Adjust the value as needed */ 
+  }
 </style>
 </head>
 <body>
 
 <!-- Sidebar (hidden by default) -->
-<nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+<nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:15%;min-width:100px" id="mySidebar">
   <a href="javascript:void(0)" onclick="w3_close()"
   class="w3-bar-item w3-button">Close Menu</a>
   <a href="#home" onclick="location.href='index.html'" class="w3-bar-item w3-button">Home</a>
