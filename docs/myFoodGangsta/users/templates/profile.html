@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FoodGangsta</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Calibri'>
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Calibri", sans-serif}
+.w3-bar-block .w3-bar-item {padding: 20px}
+a {
+  text-decoration: none;
+}
+button {
+  background-color: #378f6f;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+.w3-top { 
+  position: fixed; 
+  width: 100%; 
+  z-index: 1; /* Ensure it stays on top of other elements */ 
+  background-color: white;
+}
+body { 
+  padding-top: 150px; /* Adjust the value as needed */ 
+  }
+
+</style>
+</head>
+<body class="w3-light-grey">
+
+<!-- Top menu -->
+<div class="w3-top">
+  <div class="w3-white w3-xlarge" style="max-width:1300px;margin:auto">
+    <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()" style=" font-size: 40px;">☰</div>
+    <div class="w3-right w3-padding-16">
+      {% if user.is_authenticated %}
+      {% load static %}
+        <a href="{% url 'profile' %}" style="display: flex; align-items: center;">
+          <img src="{% static 'media/default_profile.png' %}" alt="Profile Image" style="height: 40px; width: 40px; border-radius: 50%; margin-right: 8px;">
+          {{ user.first_name }}
+        </a>
+      {% else %}
+        <a href="{% url 'user_login' %}">Login</a>
+      {% endif %}
+    </div>
+    <div class="w3-center w3-padding-16">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'media/full_logo.png' %}" alt="FoodGangsta Logo" style="height: 80px;">
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar (hidden by default) -->
+  <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+    <a href="javascript:void(0)" onclick="w3_close()"
+    class="w3-bar-item w3-button">Close Menu</a>
+    <a href="#home" onclick="location.href='index.html'" class="w3-bar-item w3-button">Home</a>
+    <a href="#recipes" onclick="location.href='savedrecipes.html'" class="w3-bar-item w3-button">Recipes</a>
+    <a href="#profile" onclick="location.href='profile.html'" class="w3-bar-item w3-button">Profile</a>
+    <a href="#about" onclick="location.href='about.html'" class="w3-bar-item w3-button">About Us</a>
+  </nav>
+
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+  
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+  
+    <!-- Left Column -->
+    <div class="w3-third">
+    
+      <div class="w3-white w3-text-grey w3-card-4">
+        <div class="w3-display-container">
+          <img src="media/default_profile.png" style="width:100%" alt="Avatar">
+          <div class="w3-display-bottomleft w3-container w3-text-black">
+            <h2>{{ first_name }} {{ last_name }}</h2>
+          </div>
+        </div>
+        <div class="w3-container">
+          <p>Username: {{ username }} </p>
+          <p>Friends</p> <!-- Make Button that goes to Friends page with search friends function-->
+          <hr>
+
+          <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Allergens</b></p>
+          <div class="container" style="background-color:#f1f1f1">
+              {% if allergens %}
+                  {% for allergen in allergens %}
+                      <p>
+                          <b>{{ allergen.name }}</b> ({{ allergen.severity }}) - Substitution ({{ allergen.substitution}})
+                      </p>
+                  {% endfor %}
+              {% else %}
+                  <p>No allergens added yet.</p>
+              {% endif %}
+              <button type="button" class="allergy-btn" onclick="location.href='allergy.html'">Edit Allergens</button>
+          </div>
+          
+          <br>
+
+        </div>
+      </div><br>
+
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-twothird">
+
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <button type="button" onclick="location.href='findfriends.html'">Find Friends</button>
+
+      </div>
+    
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Favorite Recipes</h2>
+        <div class="w3-container">
+          <!--<h5 class="w3-opacity"><b>Front End Developer / w3schools.com</b></h5>
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 - <span class="w3-tag w3-teal w3-round">Current</span></h6>
+          <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.</p>
+          <hr> -->
+        </div>
+        <div class="w3-container">
+          <!--<h5 class="w3-opacity"><b>Web Developer / something.com</b></h5>
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Mar 2012 - Dec 2014</h6>
+          <p>Consectetur adipisicing elit. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.</p>
+          <hr> -->
+        </div>
+        <div class="w3-container">
+          <!--<h5 class="w3-opacity"><b>Graphic Designer / designsomething.com</b></h5>
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jun 2010 - Mar 2012</h6>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p><br>
+        </div>
+      </div>
+
+      <div class="w3-container w3-card w3-white">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</Favorite Recipes    <div class="w3-container">
+          <h5 class="<!-- w3-opacity"><b>W3Schools.com</b></h5>
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever</h6>
+          <p>Web Development! All I need to know in one place</p>
+          <hr>
+        < /div>
+        <div class="w3-container">
+          <h5 class="<!--w3-opacity"><b>London Business School</b></h5>
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
+          <p>Master Degree</p>
+          <hr>
+        < /div>
+        <div class="w3-container">
+          <h5 class="<!--w3-opacity"><b>School of Coding</b></h5>
+          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 - 2013</h6>
+          <p>Bachelor Degree</p><br>
+        < /div>
+      </div>-->
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+
+<footer class="w3-container w3-teal w3-center w3-margin-top">
+  <p>Find me on Share Profileclass="f<!--a fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer> -->
+
+<script>
+  // Script to open and close sidebar
+  function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+  }
+   
+  function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+  }
+  </script>
+  
+</body>
+</html>

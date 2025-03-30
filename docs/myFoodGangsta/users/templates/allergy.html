@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FoodGangsta</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Calibri'>
+<style>
+    body,h1,h2,h3,h4,h5,h6 {font-family: "Calibri", sans-serif}
+    .w3-bar-block .w3-bar-item {padding: 20px}
+    a { text-decoration: none; }
+    button { background-color: #378f6f; color: white; padding: 14px 20px; margin: 8px 0; border: none; cursor: pointer; width: auto; }
+    .w3-top { position: fixed; width: 100%; z-index: 1; background-color: white; }
+    body { padding-top: 200px; }
+    .remove-btn { background-color: #f44336; color: white; padding: 5px 10px; border: none; cursor: pointer; margin-left: 10px; }
+    .cancelbtn { background-color: #f44336; color: white; } /* Red background for cancel button */
+  </style>
+</head>
+<body class="w3-light-grey">
+
+<!-- Top menu -->
+<div class="w3-top">
+  <div class="w3-white w3-xlarge" style="max-width:1300px;margin:auto">
+    <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()" style=" font-size: 40px;">☰</div>
+    <div class="w3-right w3-padding-16">
+      {% if user.is_authenticated %}
+      {% load static %}
+        <a href="{% url 'profile' %}" style="display: flex; align-items: center;">
+          <img src="{% static 'media/default_profile.png' %}" alt="Profile Image" style="height: 40px; width: 40px; border-radius: 50%; margin-right: 8px;">
+          {{ user.first_name }}
+        </a>
+      {% else %}
+        <a href="{% url 'user_login' %}">Login</a>
+      {% endif %}
+    </div>
+    <div class="w3-center w3-padding-16">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'media/full_logo.png' %}" alt="FoodGangsta Logo" style="height: 80px;">
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar (hidden by default) -->
+<nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:40%;min-width:300px" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button">Close Menu</a>
+  <a href="#home" onclick="location.href='index.html'" class="w3-bar-item w3-button">Home</a>
+  <a href="#recipes" onclick="location.href='savedrecipes.html'" class="w3-bar-item w3-button">Recipes</a>
+  <a href="#profile" onclick="location.href='profile.html'" class="w3-bar-item w3-button">Profile</a>
+  <a href="#about" onclick="location.href='about.html'" class="w3-bar-item w3-button">About Us</a>
+</nav>
+
+<!-- Allergy Form -->
+<form method="POST" action="{% url 'allergy' %}" style="border:1px solid #ccc; text-align: center; max-width: 600px; margin: auto;">
+  {% csrf_token %}
+  <div class="container">
+    <h1>Edit Allergens</h1><br>
+    <p>View, add, or remove your allergens and their sensitivity settings.</p>
+    <hr>
+
+    <div id="allergen-container">
+      <!-- Load existing allergens dynamically -->
+      {% for item in allergens_with_severities %}
+      <div class="allergen-group">
+        <label for="allergen"><b>Allergen</b></label><br>
+        <select name="allergens[]" required style="width: 80%; padding: 10px; margin: 10px 0;">
+          <option value="Tree Nuts" {% if item.allergen == "Tree Nuts" %}selected{% endif %}>Tree Nuts</option>
+          <option value="Peanuts" {% if item.allergen == "Peanuts" %}selected{% endif %}>Peanuts</option>
+          <option value="Milk" {% if item.allergen == "Milk" %}selected{% endif %}>Milk</option>
+          <option value="Eggs" {% if item.allergen == "Eggs" %}selected{% endif %}>Eggs</option>
+          <option value="Soy" {% if item.allergen == "Soy" %}selected{% endif %}>Soy</option>
+          <option value="Wheat" {% if item.allergen == "Wheat" %}selected{% endif %}>Wheat</option>
+          <option value="Fish" {% if item.allergen == "Fish" %}selected{% endif %}>Fish</option>
+          <option value="Shellfish" {% if item.allergen == "Shellfish" %}selected{% endif %}>Shellfish</option>
+          <option value="Sesame" {% if item.allergen == "Sesame" %}selected{% endif %}>Sesame</option>
+          <option value="Other" {% if item.allergen == "Other" %}selected{% endif %}>Other</option>
+        </select><br>
+
+        <label for="severity"><b>Allergen Sensitivity Setting</b></label><br>
+        <select name="severities[]" required style="width: 80%; padding: 10px; margin: 10px 0;">
+          <option value="Strict" {% if item.severity == "Strict" %}selected{% endif %}>Strict – Avoid all allergens, including ingredients labeled "May contain" or "Made in a facility with."</option>
+          <option value="Moderate" {% if item.severity == "Moderate" %}selected{% endif %}>Moderate – Avoid all direct allergens and "May contain," but allow "Made in a facility with."</option>
+          <option value="Loose" {% if item.severity == "Loose" %}selected{% endif %}>Loose – Avoid only direct allergens. Allow "May contain" and "Made in a facility with."</option>
+        </select>
+        <label for="substitution"><b>Custom Substitution (Optional)</b></label><br>
+        <input type="text" name="substitutions[]" placeholder="Enter substitution (e.g., almond milk, brand name)" style="width: 80%; padding: 10px; margin: 10px 0;"><br>
+
+        <button type="button" class="remove-btn" onclick="removeAllergen(this)">Remove</button>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button type="button" onclick="addAllergen()" style="width: auto; padding: 10px 20px; margin: 10px;">Add Allergen</button>
+    <div class="clearfix">
+      <button type="button" class="cancelbtn" onclick="location.href='profile.html'" style="width: auto; padding: 10px 20px; margin: 10px;">Cancel</button>
+      <button type="submit" class="addbtn" style="width: auto; padding: 10px 20px; margin: 10px;">Save Allergens</button>
+    </div>
+  </div>
+</form>
+
+<script>
+  // Function to add a new allergen dropdown
+  function addAllergen() {
+    const container = document.getElementById('allergen-container');
+    const newGroup = document.createElement('div');
+    newGroup.classList.add('allergen-group');
+    newGroup.innerHTML = `
+      <label for="allergen"><b>Allergen</b></label><br>
+      <select name="allergens[]" required style="width: 80%; padding: 10px; margin: 10px 0;">
+        <option value="" disabled selected>Select an allergen</option>
+        <option value="Tree Nuts">Tree Nuts</option>
+        <option value="Peanuts">Peanuts</option>
+        <option value="Dairy">Dairy</option>
+        <option value="Eggs">Eggs</option>
+        <option value="Soy">Soy</option>
+        <option value="Wheat">Wheat</option>
+        <option value="Fish">Fish</option>
+        <option value="Shellfish">Shellfish</option>
+        <option value="Sesame">Sesame</option>
+        <option value="Other">Other</option>
+      </select><br>
+
+      <label for="severity"><b>Allergen Sensitivity Setting</b></label><br>
+      <select name="severities[]" required style="width: 80%; padding: 10px; margin: 10px 0;">
+        <option value="" disabled selected>Select a sensitivity level</option>
+        <option value="Strict">Strict – Avoid all allergens, including ingredients labeled "May contain" or "Made in a facility with."</option>
+        <option value="Moderate">Moderate – Avoid all direct allergens and "May contain," but allow "Made in a facility with."</option>
+        <option value="Loose">Loose – Avoid only direct allergens. Allow "May contain" and "Made in a facility with."</option>
+      </select>
+      <button type="button" class="remove-btn" onclick="removeAllergen(this)">Remove</button>
+    `;
+    container.appendChild(newGroup);
+  }
+
+  // Function to remove an allergen dropdown
+  function removeAllergen(button) {
+    const group = button.parentElement;
+    group.remove();
+  }
+</script>
+
+</body>
+</html>

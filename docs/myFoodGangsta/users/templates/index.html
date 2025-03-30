@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>FoodGangsta</title>
+{% load static %}
+<link rel="icon" href="{% static 'media/icon_logo.png' %}" type="image/png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Calibri">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Calibri", sans-serif}
+.w3-bar-block .w3-bar-item {padding:20px}
+a {
+  text-decoration: none;
+}
+.w3-top { 
+  position: fixed; 
+  width: 100%; 
+  z-index: 1; /* Ensure it stays on top of other elements */ 
+  background-color: white;
+}
+body { 
+  padding-top: 100px; /* Adjust the value as needed */ 
+}
+*{
+  box-sizing: border-box;
+}
+  
+/* Style the search field */
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+  
+/* Style the submit button */
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #B80F0A;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
+}
+  
+form.example button:hover {
+  background: #B80F0A;
+}
+  
+/* Clear floats */
+form.example::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px; /* Adjust this value as needed */
+  margin-bottom: 16px; /* Add spacing between rows */
+}
+
+.recipe-card img {
+  flex-shrink: 0;
+  height: 150px; /* Set a fixed height for images */
+  object-fit: cover; /* Ensure the image fits nicely */
+  width: 100%;
+}
+
+.recipe-card h3 {
+  font-size: 18px;
+  margin: 8px 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Prevent long titles from wrapping */
+}
+
+.recipe-card p {
+  font-size: 14px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar (hidden by default) -->
+<nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" style="display:none;z-index:2;width:15%;min-width:100px" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()"
+  class="w3-bar-item w3-button" >☰</a>
+  <a href="#home" onclick="location.href='index.html'" class="w3-bar-item w3-button">Home</a>
+  <a href="#savedrecipes" onclick="location.href='savedrecipes.html'" class="w3-bar-item w3-button"> Saved Recipes</a>
+  <a href="#profile" onclick="location.href='profile.html'" class="w3-bar-item w3-button">Profile</a>
+  <a href="#about" onclick="location.href='about.html'" class="w3-bar-item w3-button">About Us</a>
+</nav>
+
+<!-- Top menu -->
+<div class="w3-top">
+  <div class="w3-white w3-xlarge" style="max-width:1300px;margin:auto">
+    <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()" style=" font-size: 40px;">☰</div>
+    <div class="w3-right w3-padding-16">
+      {% if user.is_authenticated %}
+      {% load static %}
+        <a href="{% url 'profile' %}" style="display: flex; align-items: center;">
+          <img src="{% static 'media/default_profile.png' %}" alt="Profile Image" style="height: 40px; width: 40px; border-radius: 50%; margin-right: 8px;">
+          {{ user.first_name }}
+        </a>
+      {% else %}
+        <a href="{% url 'user_login' %}">Login</a>
+      {% endif %}
+    </div>
+    <div class="w3-center w3-padding-16">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'media/full_logo.png' %}" alt="FoodGangsta Logo" style="height: 80px;">
+      </a>
+    </div>
+  </div>
+</div>
+  
+<!-- !PAGE CONTENT! -->
+<div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
+<!-- DEBUGGING
+  <div>
+    <p>User: {{ user }}</p>
+    <p>Is authenticated: {{ user.is_authenticated }}</p>
+  </div>
+-->
+  <!--Search Bar-->
+  <!-- Load icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<form method="POST" action="{% url 'search' %}" class="example" >
+  {% csrf_token %}
+  <div class="container">
+    {% if error_message %}
+      <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+
+    <input type="text" placeholder="Search" name="search" required>
+    <button type="submit"><i class="fa fa-search"></i></button>
+  </div> 
+</form>
+
+{% if submitFlag %}
+  <h2>Search Results:</h2>
+  {% endif %}  
+  {% if searched_recipes %}
+      <!-- First Row -->
+  <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+    {% for recipe in searched_recipes|slice:":4" %}
+    <div class="w3-quarter">
+      <div class="recipe-card">
+        <a href="{% url 'recipe' %}?url={{ recipe.url }}">
+          <img src="{{ recipe.image }}" alt="{{ recipe.title }}" style="width:100%; border-radius: 8px;">
+        </a>
+        <h3>{{ recipe.title }}</h3>
+        <p><strong>Total Time:</strong> {{ recipe.total_time }} minutes</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Second Row -->
+  <div class="w3-row-padding w3-padding-16 w3-center" id="food">
+    {% for recipe in searched_recipes|slice:"4:8" %}
+    <div class="w3-quarter">
+      <div class="recipe-card">
+        <a href="{% url 'recipe' %}?url={{ recipe.url }}">
+          <img src="{{ recipe.image }}" alt="{{ recipe.title }}" style="width:100%; border-radius: 8px;">
+        </a>
+        <h3>{{ recipe.title }}</h3>
+        <p><strong>Total Time:</strong> {{ recipe.total_time }} minutes</p>
+      </div>
+    </div>
+  
+      {% endfor %}
+  <!-- Pagination -->
+  <div class="w3-center w3-padding-32">
+    <div class="w3-bar">
+      <a href="#" class="w3-bar-item w3-button w3-hover-black">Show More</a>
+    </div>
+  </div> 
+  <!--
+    <ul>
+      {% for recipe in searched_recipes %}
+        <li>
+          <h3>{{ recipe.title }}</h3>
+          <img src="{{ recipe.image }}" alt="{{ recipe.title }}" style="width:200px; height:auto;">
+          <p><strong>Total Time:</strong> {{ recipe.total_time }} minutes</p>
+          <p><strong>Yields:</strong> {{ recipe.yields }}</p>
+          <p><strong>Ingredients:</strong></p>
+          <pre>{{ recipe.ingredients }}</pre>
+          <p><strong>Instructions:</strong></p>
+          <pre>{{ recipe.instructions }}</pre>
+          <p><strong>Source:</strong> <a href="{{ recipe.host }}" target="_blank">{{ recipe.host }}</a></p>
+          <hr>
+        </li>
+      {% endfor %}
+    </ul>-->
+  {% else %}
+    <p>No recipes found. Try another search!</p>
+  {% endif %} 
+<!-- I commented this all to work on displaying the search results but I am stupid and sleepy-->
+
+
+
+<!-- End page content -->
+</div>
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+}
+</script>
+
+</body>
+</html>
