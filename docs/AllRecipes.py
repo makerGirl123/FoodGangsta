@@ -1,5 +1,5 @@
-#import bs4
 import sys
+sys.path.append('C:/Users/mercy/AppData/Local/Programs/Python/Python313/Lib/site-packages')
 from bs4 import BeautifulSoup
 
 
@@ -20,6 +20,7 @@ class AllRecipes(object):
 		"""
 		base_url = "https://allrecipes.com/search?"
 		query_url = urllib.parse.urlencode({"q": search_string})
+		printf("Test")
 
 		url = base_url + query_url
 
